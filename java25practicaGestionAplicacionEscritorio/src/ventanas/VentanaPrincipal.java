@@ -87,10 +87,9 @@ public class VentanaPrincipal extends JFrame implements ActionListener{
 			panLisCli.refrescarClientes();
 		}else if(e.getActionCommand().equals("Insertar producto")){
 			setContentPane(panRegPro);
-			
 		}else if(e.getActionCommand().equals("Listar productos")){
 			setContentPane(panLisPro);
-			//panLisPro.refrescarProductos();
+			panLisPro.refrescarProductos();
 		}
 		
 		//Esto es para refrescar cuando paso de un panel a otro

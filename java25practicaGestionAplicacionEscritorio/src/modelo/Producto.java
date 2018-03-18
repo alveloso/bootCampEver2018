@@ -2,6 +2,8 @@ package modelo;
 
 public class Producto {
 
+	private int id;//Se utiliza para borrar datos
+
 	private String nombre;
 	private String dispositivos;
 	private String genero;
@@ -17,9 +19,25 @@ public class Producto {
 		
 	}
 	
-	public Producto(String nombre, String dispositivos, String genero, String fechaSalida, String precio, String formato, String numJugadores, String compania, String idioma, String editor){
-		
+
+
+	public Producto(String nombre, String dispositivos, String genero,
+			String fechaSalida, String precio, String formato,
+			String numJugadores, String compania, String idioma, String editor) {
+		super();
+		this.nombre = nombre;
+		this.dispositivos = dispositivos;
+		this.genero = genero;
+		this.fechaSalida = fechaSalida;
+		this.precio = precio;
+		this.formato = formato;
+		this.numJugadores = numJugadores;
+		this.compania = compania;
+		this.idioma = idioma;
+		this.editor = editor;
 	}
+
+
 
 	public String getNombre() {
 		return nombre;
@@ -99,6 +117,14 @@ public class Producto {
 
 	public void setEditor(String editor) {
 		this.editor = editor;
+	}
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	@Override

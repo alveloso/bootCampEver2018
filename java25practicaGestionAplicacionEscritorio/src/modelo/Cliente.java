@@ -2,6 +2,7 @@ package modelo;
 
 public class Cliente {
 
+	private int id;//Se utiliza para borrar datos
 	private String nombre;
 	private String domicilio;
 	private String poblacion;
@@ -68,6 +69,14 @@ public class Cliente {
 		return "Cliente [nombre=" + nombre + ", domicilio=" + domicilio
 				+ ", poblacion=" + poblacion + ", codigoPostal=" + codigoPostal
 				+ ", telefono=" + telefono + "]";
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	

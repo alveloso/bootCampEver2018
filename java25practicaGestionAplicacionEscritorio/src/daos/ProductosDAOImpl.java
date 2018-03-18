@@ -3,9 +3,11 @@ package daos;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
-import modelo.Cliente;
 import modelo.Producto;
 
 public class ProductosDAOImpl implements ProductosDAO{
@@ -27,7 +29,7 @@ public class ProductosDAOImpl implements ProductosDAO{
 	}
 	
 	@Override
-	public void registrarProducto(Producto c) {
+	public void registrarProducto(Producto p) {
 
 		//Para evitar inyeccion ponemos en los values "?".De esta forma le decimos que esta es la SQL que queremos lanzar
 		//Con 5 variables. Cuando le digamos a la base de datos que es cada
@@ -38,17 +40,18 @@ public class ProductosDAOImpl implements ProductosDAO{
 		
 		PreparedStatement ps;
 		try {
-			ps = miConexion.prepareStatement(ConstantesSQL.sqlInsercionProductos);
-			ps.setString(1, c.getNombre());
-			ps.setString(2, c.getDispositivos());
-			ps.setString(3, c.getGenero());
-			ps.setString(4, c.getFechaSalida());
-			ps.setString(5, c.getPrecio());
-			ps.setString(6, c.getFormato());
-			ps.setString(7, c.getNumJugadores());
-			ps.setString(8, c.getCompania());
-			ps.setString(9, c.getIdioma());
-			ps.setString(10, c.getEditor());
+			ps = miConexion.prepareStatement(ConstantesSQL.sqlInsercionProducto);
+			System.out.println(p.toString());
+			ps.setString(1, p.getNombre());
+			ps.setString(2, p.getDispositivos());
+			ps.setString(3, p.getGenero());
+			ps.setString(4, p.getFechaSalida());
+			ps.setString(5, p.getPrecio());
+			ps.setString(6, p.getFormato());
+			ps.setString(7, p.getNumJugadores());
+			ps.setString(8, p.getCompania());
+			ps.setString(9, p.getIdioma());
+			ps.setString(10, p.getEditor());
 			
 			//Ahora lanzamos
 			ps.execute();
@@ -62,14 +65,62 @@ public class ProductosDAOImpl implements ProductosDAO{
 
 	@Override
 	public void borrarProducto(int id) {
-		// TODO Auto-generated method stub
+		try {
+			PreparedStatement ps = miConexion.prepareStatement(ConstantesSQL.sqlBorrarProducto);
+			
+			ps.setInt(1, id);
+			ps.execute();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println("Error en la SQL de borrado");
+			System.out.println(e.getMessage());
+		}
 		
 	}
 
 	@Override
 	public Producto[] obtenerProductos() {
-		// TODO Auto-generated method stub
-		return null;
+
+		Producto[] productos = null;
+		
+		try {
+			PreparedStatement ps = miConexion.prepareStatement(ConstantesSQL.sqlSeleccionProductos);
+			
+			//Para sql tipo select debo usar el metodo executeQuery
+			ResultSet resultado = ps.executeQuery();
+			List<Producto> listProductos = new ArrayList<Producto>();
+			
+			//enxt pasa al siguiente resultado de a base de datos
+			/*
+			 * que aun no hemos procesado, si no hay ningun resultado mas
+			 * devuelve false
+			 */
+			while(resultado.next()){
+				Producto p = new Producto();
+				
+				//Nombre de la columna de la tabla en el get String
+				p.setNombre(resultado.getString("nombre"));
+				p.setDispositivos(resultado.getString("dispositivos"));
+				p.setGenero(resultado.getString("genero"));
+				p.setFechaSalida(resultado.getString("fecha_salida"));
+				p.setPrecio(resultado.getString("precio"));
+				p.setFormato(resultado.getString("formato"));
+				p.setNumJugadores(resultado.getString("numero_jugadores"));
+				p.setCompania(resultado.getString("compania"));
+				p.setIdioma(resultado.getString("idioma"));
+				p.setEditor(resultado.getString("editor"));
+				p.setId(resultado.getInt("id"));
+				
+				listProductos.add(p);
+			}
+			//Transformar de list a array
+			productos = listProductos.toArray(new Producto[listProductos.size()]);
+			
+		} catch (SQLException e) {
+			System.out.println("Fallo en la SQL de seleccion productos");
+		}
+		
+		return productos;
 	}
 
 }

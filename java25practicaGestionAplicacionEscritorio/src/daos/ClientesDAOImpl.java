@@ -60,7 +60,16 @@ public class ClientesDAOImpl implements ClientesDAO{
 
 	@Override
 	public void borrarCliente(int id) {
-		// TODO Auto-generated method stub
+		try {
+			PreparedStatement ps = miConexion.prepareStatement(ConstantesSQL.sqlBorrarCliente);
+			
+			ps.setInt(1, id);
+			ps.execute();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println("Error en la SQL de borrado");
+			System.out.println(e.getMessage());
+		}
 		
 	}
 
@@ -90,6 +99,7 @@ public class ClientesDAOImpl implements ClientesDAO{
 				c.setCodigoPostal(resultado.getString("codigo_postal"));
 				c.setPoblacion(resultado.getString("poblacion"));
 				c.setTelefono(resultado.getString("telefono"));
+				c.setId(resultado.getInt("id"));
 				
 				listClientes.add(c);
 			}
@@ -102,15 +112,5 @@ public class ClientesDAOImpl implements ClientesDAO{
 		
 		return clientes;
 	}
-
-//	public static void main(String[] args) {
-//
-//		ClientesDAOImpl dao = new ClientesDAOImpl();
-//		Cliente[] clientes = dao.obtenerClientes();
-//
-//		for (Cliente cliente : clientes) {
-//			System.out.println(cliente.toString());
-//		}
-//	}
 
 }
